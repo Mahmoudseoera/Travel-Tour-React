@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+
 import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "./components/navbar"
-import "./globals.css";
+import Navbar from "../components/navbar"
+import Footer from "../components/layout/footer"
+import "../styles/globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tour Vista",
+  title: "Zoya Travel Tour Agency",
   description: "Travel Tour Agency",
 };
 
@@ -28,6 +30,7 @@ export default function RootLayout({
       <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
