@@ -20,12 +20,33 @@ export interface HeaderData {
     }>;
   }>;
 }
+export interface FooterData {
+  site_address: string;
+  site_address_2: string | null;
+  copy_rights: string;
+  footerCategories: Array<{
+    id: number;
+    name: {
+      en: string;
+    };
+    slug: string;
+    children: Array<{
+      id: number;
+      name: {
+        en: string;
+      };
+      slug: string;
+    }>;
+  }>;
+}
 
 export interface ApiResponse {
   data: {
     header: HeaderData;
+    footer: FooterData;
   };
 }
+
 
 // Base API configuration
 const API_BASE_URL = 'https://www.wondertravelegypt.com/api';
@@ -59,10 +80,13 @@ export const apiService = {
   
   // Add more methods as needed
 };
+type GeneralData = {
+  header: HeaderData;
+  footer: FooterData;
+};
 
-// Custom hook for general data
 export const useGeneralData = () => {
-  const [data, setData] = React.useState<HeaderData | null>(null);
+  const [data, setData] = React.useState<GeneralData | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -70,12 +94,10 @@ export const useGeneralData = () => {
     async function loadData() {
       try {
         setLoading(true);
-        setError(null);
         const result = await apiService.getGeneralData();
-        setData(result.data.header);
+        setData(result.data); // ⬅️ header + footer
       } catch (err) {
-        console.error('Failed to fetch data:', err);
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        setError(err instanceof Error ? err.message : "Error");
       } finally {
         setLoading(false);
       }

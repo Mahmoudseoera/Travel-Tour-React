@@ -1,217 +1,182 @@
-import { Facebook, Instagram, Youtube, MessageCircle, Mail, Phone, MapPin } from "lucide-react";
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import { Mail, MapPin, Phone } from "lucide-react";
+import { useGeneralData } from "@/lib/api/GeneralApi";
+export function Footer() {
+  const { data, loading, error } = useGeneralData();
 
-const Footer = () => {
-  const topDestinations = [
-    "Cairo City Break",
-    "Luxor & Karnak",
-    "Aswan Temples",
-    "Nile Cruise",
-    "Hurghada Red Sea",
-  ];
+  if (loading) {
+    return (
+      <footer className="border-t bg-gradient-to-b from-background to-secondary/30">
+        <div className="container mx-auto px-4 py-12 md:py-16">
+          <p>Loading...</p>
+        </div>
+      </footer>
+    );
+  }
 
-  const popularSearches = [
-    "Nile Cruise Packages",
-    "Pyramids Day Tours",
-    "Red Sea Diving Trips",
-    "Family Egypt Vacations",
-    "Desert Camping",
-  ];
-
-  const resources = [
-    "About Zoya Egypt",
-    "Travel Tips & Safety",
-    "Egypt Visa Guide",
-    "Build Your Itinerary",
-    "Travel Inspiration",
-  ];
+  if (error || !data) {
+    return (
+      <footer className="border-t bg-gradient-to-b from-background to-secondary/30">
+        <div className="container mx-auto px-4 py-12 md:py-16">
+          <p>Failed to load footer</p>
+        </div>
+      </footer>
+    );
+  }
 
   return (
-    <footer className="w-full">
-      {/* Top Contact Bar */}
-      <div className="bg-footer py-4 px-4 md:px-8">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-footer-dark flex items-center justify-center">
-              <MessageCircle className="w-5 h-5 text-footer-text" />
-            </div>
-            <div>
-              <p className="text-footer-text font-semibold text-sm">For More Inquiries</p>
-              <p className="text-footer-muted text-xs">Reach our Cairo travel experts anytime.</p>
+    <footer className="border-t bg-gradient-to-b from-background to-secondary/30">
+      <div className="container mx-auto px-4 py-12 md:py-16">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+          <div className="space-y-5 lg:col-span-1">
+            <h3 className="text-2xl font-bold text-primary">
+              {" "}
+              {/* Logo */}
+              <Link
+                href="/"
+                className="flex items-center space-x-3 rtl:space-x-reverse"
+              >
+                <Image
+                  src={data.header.logo}
+                  alt="Logo"
+                  width={120}
+                  height={40}
+                  className="h-7 w-auto"
+                />
+              </Link>
+            </h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Discover the wonders of ancient Egypt with expertly curated tours
+              to the Pyramids, Nile cruises, and historic temples.
+            </p>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <MapPin className="h-4 w-4" />
+                <span>{data.footer.site_address}</span>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Phone className="h-4 w-4" />
+                <span>+20 2 1234 5678</span>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Mail className="h-4 w-4" />
+                <span>info@nilevoyages.com</span>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center">
-              <Phone className="w-5 h-5 text-footer-text" />
-            </div>
-            <div>
-              <p className="text-footer-accent font-semibold text-sm">WhatsApp Egypt</p>
-              <p className="text-footer-text text-sm font-medium">+20 100 636 3735</p>
-            </div>
-          </div>
+{data.footer.footerCategories.map((category) => (
+  <div key={category.id} className="space-y-4">
+    <h4 className="text-sm font-semibold uppercase tracking-wider">
+      {category.name.en}
+    </h4>
 
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-footer-dark flex items-center justify-center">
-              <Mail className="w-5 h-5 text-footer-text" />
-            </div>
-            <div>
-              <p className="text-footer-muted text-sm">Email</p>
-              <p className="text-footer-text text-sm font-medium">info@zoyatoursegypt.com</p>
-            </div>
-          </div>
+    <ul className="space-y-3 text-sm">
+      {category.children.map((child) => (
+        <li key={child.id}>
+          <Link
+            href={`/tours/${child.slug}`}
+            className="text-muted-foreground hover:text-primary transition-colors"
+          >
+            {child.name.en}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+))}
 
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-footer-accent flex items-center justify-center">
-              <Phone className="w-5 h-5 text-footer-bottom" />
-            </div>
-            <div>
-              <p className="text-footer-muted text-sm">24/7 Hotline</p>
-              <p className="text-footer-accent text-sm font-semibold">+20 2 2673 3355</p>
-            </div>
-          </div>
         </div>
-      </div>
 
-      {/* Main Footer Content */}
-      <div 
-        className="bg-footer-dark py-12 px-4 md:px-8 relative"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600'%3E%3Cpath fill='%23ffffff' fill-opacity='0.03' d='M0,300 Q300,200 600,300 T1200,300 L1200,600 L0,600 Z'/%3E%3C/svg%3E")`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-footer-accent text-3xl font-bold tracking-wider">
-                Z<span className="text-footer-text">☀</span>YA
-              </h2>
-              <p className="text-footer-accent text-xs tracking-widest">TOURS EGYPT</p>
-              <p className="text-footer-accent text-sm italic mt-1">Frame Your Memories</p>
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-footer-text font-semibold">Zoya Tours Egypt</p>
-              <p className="text-footer-muted text-sm leading-relaxed">
-                54 El Tahrir Street, Dokki, Giza<br />
-                Governorate 12611, Egypt
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <a 
-                href="#" 
-                className="w-8 h-8 rounded-full bg-footer-bottom flex items-center justify-center hover:bg-footer-accent transition-colors group"
-              >
-                <Facebook className="w-4 h-4 text-footer-text group-hover:text-footer-bottom" />
-              </a>
-              <a 
-                href="#" 
-                className="w-8 h-8 rounded-full bg-footer-bottom flex items-center justify-center hover:bg-footer-accent transition-colors group"
-              >
-                <Instagram className="w-4 h-4 text-footer-text group-hover:text-footer-bottom" />
-              </a>
-              <a 
-                href="#" 
-                className="w-8 h-8 rounded-full bg-footer-bottom flex items-center justify-center hover:bg-footer-accent transition-colors group"
-              >
-                <MapPin className="w-4 h-4 text-footer-text group-hover:text-footer-bottom" />
-              </a>
-              <a 
-                href="#" 
-                className="w-8 h-8 rounded-full bg-footer-bottom flex items-center justify-center hover:bg-footer-accent transition-colors group"
-              >
-                <Youtube className="w-4 h-4 text-footer-text group-hover:text-footer-bottom" />
-              </a>
-            </div>
-          </div>
-
-          {/* Top Destinations */}
-          <div>
-            <h3 className="text-footer-text font-semibold text-lg mb-6">Top Destinations</h3>
-            <ul className="space-y-3">
-              {topDestinations.map((item) => (
-                <li key={item}>
-                  <a 
-                    href="#" 
-                    className="text-footer-muted text-sm hover:text-footer-accent transition-colors flex items-center gap-2"
-                  >
-                    <span className="text-footer-accent">▶</span>
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Popular Searches */}
-          <div>
-            <h3 className="text-footer-text font-semibold text-lg mb-6">Popular Searches</h3>
-            <ul className="space-y-3">
-              {popularSearches.map((item) => (
-                <li key={item}>
-                  <a 
-                    href="#" 
-                    className="text-footer-muted text-sm hover:text-footer-accent transition-colors flex items-center gap-2"
-                  >
-                    <span className="text-footer-accent">▶</span>
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <h3 className="text-footer-text font-semibold text-lg mb-6">Resources</h3>
-            <ul className="space-y-3">
-              {resources.map((item) => (
-                <li key={item}>
-                  <a 
-                    href="#" 
-                    className="text-footer-muted text-sm hover:text-footer-accent transition-colors flex items-center gap-2"
-                  >
-                    <span className="text-footer-accent">▶</span>
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom Bar */}
-      <div className="bg-footer-bottom py-4 px-4 md:px-8">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-          <p className="text-footer-muted text-sm">
-            Copyright 2025 SeoEra | All Right Reserved.
+        <div className="mt-12 border-t border-border pt-8 flex flex-col items-center justify-between gap-6 md:flex-row">
+          <p className="text-sm text-muted-foreground text-center md:text-left">
+            © {new Date().getFullYear()} {data.footer.copy_rights}
           </p>
 
-          <div className="flex items-center gap-4">
-            <span className="text-footer-muted text-sm">Accepted Payment Methods :</span>
-            <div className="flex items-center gap-2">
-              <div className="bg-gradient-to-r from-red-600 to-orange-500 text-footer-text text-xs font-bold px-3 py-1 rounded">
-                MasterCard
-              </div>
-              <div className="bg-[#1A1F71] text-footer-text text-xs font-bold px-3 py-1 rounded">
-                VISA
-              </div>
-              <div className="bg-[#003087] text-footer-text text-xs font-bold px-3 py-1 rounded">
-                PayPal
-              </div>
-              <div className="bg-footer-text text-footer-bottom text-xs font-bold px-3 py-1 rounded">
-                G Pay
-              </div>
-            </div>
+          <div className="flex items-center gap-5">
+            <Link
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Facebook"
+            >
+              <svg
+                className="h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </Link>
+            <Link
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Instagram"
+            >
+              <svg
+                className="h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </Link>
+            <Link
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Twitter"
+            >
+              <svg
+                className="h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </Link>
+            <Link
+              href="https://youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="YouTube"
+            >
+              <svg
+                className="h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </Link>
           </div>
         </div>
       </div>
     </footer>
   );
-};
+}
 
 export default Footer;
