@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "../components/navbar"
+import Navbar from "../components/layout/navbar"
 import Footer from "../components/layout/footer"
 import "../styles/globals.css";
 
@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zoya Travel Tour Agency",
+  title: "React Template Travel Tour Agency",
   description: "Travel Tour Agency",
 };
 

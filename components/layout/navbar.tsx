@@ -2,11 +2,9 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 import { Mail, Phone } from "lucide-react"
-import { cn } from "../lib/utils"
-import { Icons } from "./icons"
-import { useGeneralData } from "../lib/services/GeneralApi"
-import { apiService } from "../lib/services/GeneralApi"
+import { useGeneralData, apiService } from "@/lib/api/GeneralApi"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,7 +13,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "./ui/navigation-menu"
+} from "../ui/navigation-menu"
 
 export default function Navbar() {
   const { data, loading, error } = useGeneralData();
